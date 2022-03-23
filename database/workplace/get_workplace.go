@@ -12,7 +12,8 @@ func GetWorkplaces(ctx context.Context) ([]models.Workplace, error) {
 
 	q := `
 	SELECT id, name, code, address, created_at, updated_at
-		FROM workplace;
+		FROM workplace
+		ORDER BY id ASC;
 	`
 
 	rows, err := database.Data().QueryContext(ctx, q)
