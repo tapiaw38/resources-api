@@ -35,7 +35,6 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 		var fileCode, agentNumber, documentNumber models.NullString
 		var workplaceId models.NullInt64
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
-		var updatedAt models.NullTime
 		var birthDate, dateAdmission models.NullDate
 
 		err := rows.Scan(
@@ -59,7 +58,7 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 			&workplaceCode,
 			&workplaceAddress,
 			&e.CreatedAt,
-			&updatedAt,
+			&e.UpdatedAt,
 		)
 
 		if err != nil {
@@ -102,10 +101,6 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 
 		if workplaceAddress.Valid {
 			e.Workplace.Address = workplaceAddress.String
-		}
-
-		if updatedAt.Valid {
-			e.UpdatedAt = updatedAt.Time
 		}
 
 		employees = append(employees, e)
