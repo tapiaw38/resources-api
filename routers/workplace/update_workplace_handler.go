@@ -9,6 +9,7 @@ import (
 	workplace "github.com/tapiaw38/resources-api/database/workplace"
 )
 
+// UpdateWorkplaceHandler handles the request to update a workplace
 func UpdateWorkplaceHandler(w http.ResponseWriter, r *http.Request) {
 
 	var wp models.Workplace

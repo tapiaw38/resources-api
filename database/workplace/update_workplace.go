@@ -8,6 +8,7 @@ import (
 	"github.com/tapiaw38/resources-api/models"
 )
 
+// UpdateWorkplace updates a workplace in the database
 func UpdateWorkplace(ctx context.Context, id string, w models.Workplace) (models.Workplace, error) {
 
 	var workplace models.Workplace
