@@ -51,6 +51,8 @@ func HandlerServer() {
 		http.MethodPost).HandlerFunc(middlewares.CheckDB(workplace.CreateWorkplaceHandler))
 	workplaces.Path("").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDB(workplace.GetWorkplacesHandler))
+	workplaces.Path("/update").Methods(
+		http.MethodPut).HandlerFunc(middlewares.CheckDB(workplace.UpdateWorkplaceHandler))
 
 	// Routes for employee types
 	employeeTypes.Path("/create").Methods(
