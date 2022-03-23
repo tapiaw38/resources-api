@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS employee (
     address VARCHAR(150) DEFAULT '',
     picture VARCHAR(256) DEFAULT '',
     salary NUMERIC(10,2) DEFAULT 0,
-    category INTEGER DEFAULT 0,
+    category INTEGER DEFAULT 10,
     status INTEGER DEFAULT 1,
     work_number VARCHAR(150) DEFAULT '',
     employee_type BIGINT,
