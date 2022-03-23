@@ -12,10 +12,6 @@ type NullInt64 struct {
 	sql.NullInt64
 }
 
-type NullInt32 struct {
-	sql.NullInt32
-}
-
 // Null Date type for sql.NullTime
 type NullDate struct {
 	sql.NullString
