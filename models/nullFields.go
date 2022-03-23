@@ -1,6 +1,9 @@
 package models
 
-import "database/sql"
+import (
+	sql "database/sql"
+	"time"
+)
 
 // Null String type for sql.NullString
 type NullString struct {
@@ -19,7 +22,8 @@ type NullDate struct {
 
 // Null Time type for sql.NullTime
 type NullTime struct {
-	sql.NullTime
+	time.Time
+	Valid bool
 }
 
 // Null Float type for sql.NullFloat64
