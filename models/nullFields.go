@@ -14,6 +14,11 @@ type NullInt64 struct {
 	sql.NullInt64
 }
 
+// Null Time type for sql.NullTime
+type NullTime struct {
+	sql.NullTime
+}
+
 // Null Float type for sql.NullFloat64
 type NullFloat struct {
 	sql.NullFloat64
