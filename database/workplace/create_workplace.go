@@ -37,5 +37,4 @@ func CreateWorkplace(ctx context.Context, w *models.Workplace) (models.Workplace
 	}
 
 	return workplace, nil
-
 }
