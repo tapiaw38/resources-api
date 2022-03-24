@@ -16,9 +16,11 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 		employee.birth_date, employee.date_admission, employee.phone, 
 		employee.address, employee.picture, employee.salary, employee.category, 
 		employee.status, employee.work_number, workplace.id, workplace.name, workplace.code, 
-		workplace.address, employee.created_at, employee.updated_at
+		workplace.address, employee_type.id, employee_type.name, employee_type.description, 
+		employee.created_at, employee.updated_at	
 		FROM employee
-		LEFT JOIN workplace ON employee.workplace = workplace.id;
+		LEFT JOIN workplace ON employee.workplace = workplace.id
+		LEFT JOIN employee_type ON employee.employee_type = employee_type.id;
 	`
 
 	rows, err := database.Data().QueryContext(ctx, q)
@@ -35,7 +37,9 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 		var fileCode, agentNumber, documentNumber models.NullString
 		var workplaceId models.NullInt64
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
-		var birthDate, dateAdmission models.NullDate
+		var typeId models.NullInt64
+		var typeName, typeDescription models.NullString
+		var birthDate, dateAdmission models.NullString
 
 		err := rows.Scan(
 			&e.ID,
@@ -57,6 +61,9 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 			&workplaceName,
 			&workplaceCode,
 			&workplaceAddress,
+			&typeId,
+			&typeName,
+			&typeDescription,
 			&e.CreatedAt,
 			&e.UpdatedAt,
 		)
@@ -101,6 +108,18 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 
 		if workplaceAddress.Valid {
 			e.Workplace.Address = workplaceAddress.String
+		}
+
+		if typeId.Valid {
+			e.EmployeeType.ID = typeId.Int64
+		}
+
+		if typeName.Valid {
+			e.EmployeeType.Name = typeName.String
+		}
+
+		if typeDescription.Valid {
+			e.EmployeeType.Description = typeDescription.String
 		}
 
 		employees = append(employees, e)
