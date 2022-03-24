@@ -39,7 +39,7 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
 		var typeId models.NullInt64
 		var typeName, typeDescription models.NullString
-		var birthDate, dateAdmission models.NullTime
+		var birthDate, dateAdmission models.NullString
 
 		err := rows.Scan(
 			&e.ID,
@@ -87,11 +87,11 @@ func GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
 		}
 
 		if birthDate.Valid {
-			e.BirthDate = birthDate.Time
+			e.BirthDate = birthDate.String
 		}
 
 		if dateAdmission.Valid {
-			e.DateAdmission = dateAdmission.Time
+			e.DateAdmission = dateAdmission.String
 		}
 
 		if workplaceId.Valid {
