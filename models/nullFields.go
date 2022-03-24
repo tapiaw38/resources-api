@@ -2,6 +2,7 @@ package models
 
 import (
 	sql "database/sql"
+	"time"
 )
 
 // Null String type for sql.NullString
@@ -16,7 +17,8 @@ type NullInt64 struct {
 
 // Null Time type for sql.NullTime
 type NullTime struct {
-	sql.NullTime
+	time.Time
+	Valid bool
 }
 
 // Null Float type for sql.NullFloat64
