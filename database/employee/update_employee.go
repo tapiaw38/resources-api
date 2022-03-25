@@ -23,9 +23,25 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 			employee_type, workplace, created_at, updated_at;
 	`
 
+	var birthDate, dateAdmission models.NullString
+
+	if e.BirthDate == "" {
+		birthDate.Valid = false
+	} else {
+		birthDate.Valid = true
+		birthDate.String = e.BirthDate
+	}
+
+	if e.DateAdmission == "" {
+		dateAdmission.Valid = false
+	} else {
+		dateAdmission.Valid = true
+		dateAdmission.String = e.DateAdmission
+	}
+
 	rows := database.Data().QueryRowContext(
 		ctx, q, e.FileCode, e.AgentNumber, e.FirstName, e.LastName, e.DocumentNumber,
-		e.BirthDate, e.DateAdmission, e.Phone, e.Address, e.Picture, e.Salary,
+		birthDate, dateAdmission, e.Phone, e.Address, e.Picture, e.Salary,
 		e.Category, e.Status, e.WorkNumber, e.EmployeeType, e.Workplace, e.UpdatedAt, id,
 	)
 
@@ -36,8 +52,8 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 		&employee.FirstName,
 		&employee.LastName,
 		&employee.DocumentNumber,
-		&employee.BirthDate,
-		&employee.DateAdmission,
+		&birthDate,
+		&dateAdmission,
 		&employee.Phone,
 		&employee.Address,
 		&employee.Picture,
@@ -50,6 +66,14 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 		&employee.CreatedAt,
 		&employee.UpdatedAt,
 	)
+
+	if birthDate.Valid {
+		employee.BirthDate = birthDate.String
+	}
+
+	if dateAdmission.Valid {
+		employee.DateAdmission = dateAdmission.String
+	}
 
 	if err != nil {
 		return employee, err
