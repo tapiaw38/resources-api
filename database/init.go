@@ -42,7 +42,7 @@ func NewConnection() *sql.DB {
 	return data
 }
 
-// Data is the function to get the database usage in the packages that need it
+// Data is the Pool conections to get the database usage in the packages that need it
 func Data() *sql.DB {
 	return data
 }

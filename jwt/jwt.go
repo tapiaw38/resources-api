@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"os"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -10,7 +11,7 @@ import (
 // GenerateToken generates a JWT token
 func GenerateJWT(user models.User) (string, error) {
 
-	myKey := []byte("bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK")
+	myKey := []byte(os.Getenv("JWT_SECRET"))
 
 	payload := jwt.MapClaims{
 		"id":         user.ID,

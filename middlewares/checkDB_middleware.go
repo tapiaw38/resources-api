@@ -6,8 +6,8 @@ import (
 	"github.com/tapiaw38/resources-api/database"
 )
 
-// CheckDB checks if the database connection is working
-func CheckDB(next http.HandlerFunc) http.HandlerFunc {
+// CheckDBMiddleware checks if the database connection is working
+func CheckDBMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := database.CheckConnection()
 

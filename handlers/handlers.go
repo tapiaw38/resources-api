@@ -28,45 +28,45 @@ func HandlerServer() {
 
 	// Routes for users
 	users.Path("/register").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDB(user.CreateUserHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(user.CreateUserHandler))
 	users.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(user.GetUsersHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUsersHandler))
 	users.Path("/user").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(user.GetUserByIdHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUserByIdHandler))
 	users.Path("/profile").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(user.GetUserByUsernameHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUserByUsernameHandler))
 	users.Path("/update").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDB(user.UpdateUserHandler))
+		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(user.UpdateUserHandler))
 	users.Path("/delete").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDB(user.DeleteUserHandler))
+		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(user.DeleteUserHandler))
 	users.Path("/login").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDB(login.LoginHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(login.LoginHandler))
 
 	// Routes for employees
 	employees.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDB(employee.CreateEmployeeHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employee.CreateEmployeeHandler))
 	employees.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(employee.GetEmployeesHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesHandler))
 	employees.Path("/update").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDB(employee.UpdateEmployeeHandler))
+		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(employee.UpdateEmployeeHandler))
 	employees.Path("/get_by_type").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(employee.GetEmployeesByTypeHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByTypeHandler))
 
 	// Routes for workplaces
 	workplaces.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDB(workplace.CreateWorkplaceHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(workplace.CreateWorkplaceHandler))
 	workplaces.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(workplace.GetWorkplacesHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(workplace.GetWorkplacesHandler))
 	workplaces.Path("/update").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDB(workplace.UpdateWorkplaceHandler))
+		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(workplace.UpdateWorkplaceHandler))
 	workplaces.Path("/delete").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDB(workplace.DeleteWorkplaceHandler))
+		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(workplace.DeleteWorkplaceHandler))
 
 	// Routes for employee types
 	employeeTypes.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDB(employeeType.CreateEmployeeTypeHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.CreateEmployeeTypeHandler))
 	employeeTypes.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDB(employeeType.GetEmployeeTypesHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.GetEmployeeTypesHandler))
 
 	handler := cors.AllowAll().Handler(router)
 
