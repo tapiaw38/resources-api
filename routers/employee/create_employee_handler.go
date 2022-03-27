@@ -9,6 +9,7 @@ import (
 	employee "github.com/tapiaw38/resources-api/database/employee"
 )
 
+// CreateEmployeeHandler handles the request to create a employee
 func CreateEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
 	var emp models.Employee

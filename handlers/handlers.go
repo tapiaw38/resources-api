@@ -9,9 +9,9 @@ import (
 	"github.com/rs/cors"
 
 	"github.com/tapiaw38/resources-api/middlewares"
+	auth "github.com/tapiaw38/resources-api/routers/auth"
 	employee "github.com/tapiaw38/resources-api/routers/employee"
 	employeeType "github.com/tapiaw38/resources-api/routers/employee_type"
-	login "github.com/tapiaw38/resources-api/routers/login"
 	user "github.com/tapiaw38/resources-api/routers/user"
 	workplace "github.com/tapiaw38/resources-api/routers/workplace"
 )
@@ -30,17 +30,17 @@ func HandlerServer() {
 	users.Path("/register").Methods(
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(user.CreateUserHandler))
 	users.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUsersHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.GetUsersHandler)))
 	users.Path("/user").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUserByIdHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByIdHandler)))
 	users.Path("/profile").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(user.GetUserByUsernameHandler))
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByUsernameHandler)))
 	users.Path("/update").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(user.UpdateUserHandler))
+		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.UpdateUserHandler)))
 	users.Path("/delete").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(user.DeleteUserHandler))
+		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.DeleteUserHandler)))
 	users.Path("/login").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(login.LoginHandler))
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(auth.LoginHandler))
 
 	// Routes for employees
 	employees.Path("/create").Methods(

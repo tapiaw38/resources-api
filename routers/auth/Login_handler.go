@@ -1,4 +1,4 @@
-package login
+package auth
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 
 	"github.com/tapiaw38/resources-api/jwt"
 
-	login "github.com/tapiaw38/resources-api/database/login"
+	auth "github.com/tapiaw38/resources-api/database/auth"
 )
 
 // Login handles the request to login a user
@@ -29,7 +29,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	foundUser, exist := login.Login(user.Email, user.Password)
+	foundUser, exist := auth.Login(user.Email, user.Password)
 
 	if !exist {
 		http.Error(w, "The email or password are invalid", 400)
