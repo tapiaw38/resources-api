@@ -22,7 +22,7 @@ func GenerateJWT(user models.User) (string, error) {
 		"picture":    user.Picture,
 		"is_active":  user.IsActive,
 		"is_admin":   user.IsAdmin,
-		"exp":        user.CreatedAt.Add(time.Hour * 24).Unix(),
+		"exp":        user.CreatedAt.Add(time.Hour * 48).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)

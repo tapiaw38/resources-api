@@ -27,18 +27,26 @@ func HandlerServer() {
 	employeeTypes := router.PathPrefix("/api/v1/types").Subrouter()
 
 	// Routes for users
+
+	//create
 	users.Path("/register").Methods(
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(user.CreateUserHandler))
+	//get all
 	users.Path("").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.GetUsersHandler)))
-	users.Path("/user").Methods(
+	//get by id
+	users.Path("/user/{id:[0-9]+}").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByIdHandler)))
+	//get by username
 	users.Path("/profile").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByUsernameHandler)))
-	users.Path("/update").Methods(
+	//update
+	users.Path("/update/{id:[0-9]+}").Methods(
 		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.UpdateUserHandler)))
-	users.Path("/delete").Methods(
+	//delete
+	users.Path("/delete/{id:[0-9]+}").Methods(
 		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.DeleteUserHandler)))
+	//login
 	users.Path("/login").Methods(
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(auth.LoginHandler))
 
@@ -47,9 +55,9 @@ func HandlerServer() {
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employee.CreateEmployeeHandler))
 	employees.Path("").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesHandler))
-	employees.Path("/update").Methods(
+	employees.Path("/update/{id:[0-9]+}").Methods(
 		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(employee.UpdateEmployeeHandler))
-	employees.Path("/get_by_type").Methods(
+	employees.Path("/get_by_type/{type_id:[0-9]+}").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByTypeHandler))
 
 	// Routes for workplaces
@@ -57,9 +65,9 @@ func HandlerServer() {
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(workplace.CreateWorkplaceHandler))
 	workplaces.Path("").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(workplace.GetWorkplacesHandler))
-	workplaces.Path("/update").Methods(
+	workplaces.Path("/update/{id:[0-9]+}").Methods(
 		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(workplace.UpdateWorkplaceHandler))
-	workplaces.Path("/delete").Methods(
+	workplaces.Path("/delete/{id:[0-9]+}").Methods(
 		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(workplace.DeleteWorkplaceHandler))
 
 	// Routes for employee types

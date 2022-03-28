@@ -23,6 +23,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 // AuthAdmin Middleware checks if the user is logged in and is an admin
 func AuthAdminMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		_, _, u, err := auth.ValidateToken(r.Header.Get("Authorization"))
 
 		if err != nil {

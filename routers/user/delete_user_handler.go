@@ -3,13 +3,14 @@ package user
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	user "github.com/tapiaw38/resources-api/database/user"
 )
 
 // DeleteUserHandler handles the request to delete a user
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 
-	id := r.URL.Query().Get("id")
+	id := mux.Vars(r)["id"]
 
 	if id == "" {
 		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)

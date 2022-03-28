@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/tapiaw38/resources-api/models"
 
 	workplace "github.com/tapiaw38/resources-api/database/workplace"
@@ -14,7 +15,7 @@ func UpdateWorkplaceHandler(w http.ResponseWriter, r *http.Request) {
 
 	var wp models.Workplace
 
-	id := r.URL.Query().Get("id")
+	id := mux.Vars(r)["id"]
 
 	if id == "" {
 		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)

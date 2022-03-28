@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	user "github.com/tapiaw38/resources-api/database/user"
 )
 
@@ -28,7 +29,12 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 func GetUserByIdHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
-	id := r.URL.Query().Get("id")
+	id := mux.Vars(r)["id"]
+
+	if id == "" {
+		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)
+		return
+	}
 
 	user, err := user.GetUserById(ctx, id)
 

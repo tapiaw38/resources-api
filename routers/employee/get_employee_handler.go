@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	employee "github.com/tapiaw38/resources-api/database/employee"
 )
 
@@ -27,7 +28,7 @@ func GetEmployeesHandler(w http.ResponseWriter, r *http.Request) {
 // GetEmployeeByTypeHandler handles the request to get a employee by type
 func GetEmployeesByTypeHandler(w http.ResponseWriter, r *http.Request) {
 
-	typeId := r.URL.Query().Get("type_id")
+	typeId := mux.Vars(r)["type_id"]
 
 	if typeId == "" {
 		http.Error(w, "An error occurred, type_id is required", http.StatusBadRequest)

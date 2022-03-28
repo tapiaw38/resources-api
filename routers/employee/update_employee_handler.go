@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/tapiaw38/resources-api/models"
 
 	employee "github.com/tapiaw38/resources-api/database/employee"
@@ -14,7 +15,7 @@ func UpdateEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
 	var e models.Employee
 
-	id := r.URL.Query().Get("id")
+	id := mux.Vars(r)["id"]
 
 	if id == "" {
 		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)

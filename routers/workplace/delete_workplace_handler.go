@@ -3,12 +3,13 @@ package workplace
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	workplace "github.com/tapiaw38/resources-api/database/workplace"
 )
 
 func DeleteWorkplaceHandler(w http.ResponseWriter, r *http.Request) {
 
-	id := r.URL.Query().Get("id")
+	id := mux.Vars(r)["id"]
 
 	if id == "" {
 		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)

@@ -6,31 +6,31 @@ import (
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/tapiaw38/resources-api/database/auth"
+	auth "github.com/tapiaw38/resources-api/database/auth"
 	"github.com/tapiaw38/resources-api/models"
 )
 
 var userFind models.User
 
 // ValidateToken validates the token
-func ValidateToken(token string) (*models.Claim, bool, models.User, error) {
-
-	key := []byte(os.Getenv("JWT_SECRET"))
-
-	claims := &models.Claim{}
-
-	splitToken := strings.Split(token, "Bearer")
+func ValidateToken(tk string) (*models.Claim, bool, models.User, error) {
 
 	u := models.User{}
 
+	myKey := []byte(os.Getenv("JWT_SECRET"))
+
+	claims := &models.Claim{}
+
+	splitToken := strings.Split(tk, "Bearer")
+
 	if len(splitToken) != 2 {
-		return claims, false, u, errors.New("The token format is invalid")
+		return claims, false, u, errors.New("token format invalid")
 	}
 
-	token = strings.TrimSpace(splitToken[1])
+	tk = strings.TrimSpace(splitToken[1])
 
-	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return key, nil
+	tkn, err := jwt.ParseWithClaims(tk, claims, func(token *jwt.Token) (interface{}, error) {
+		return myKey, nil
 	})
 
 	if err == nil {
@@ -45,7 +45,7 @@ func ValidateToken(token string) (*models.Claim, bool, models.User, error) {
 	}
 
 	if !tkn.Valid {
-		return claims, false, u, errors.New("Invalid token")
+		return claims, false, u, errors.New("invalid token")
 	}
 
 	return claims, false, u, err
