@@ -22,7 +22,7 @@ type NullTime struct {
 }
 
 // Null Float type for sql.NullFloat64
-type NullFloat struct {
+type NullFloat64 struct {
 	sql.NullFloat64
 }
 

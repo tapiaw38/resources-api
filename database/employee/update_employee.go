@@ -23,7 +23,23 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 			employee_type, workplace, created_at, updated_at;
 	`
 
+	var fileCode, documentNumber models.NullString
 	var birthDate, dateAdmission models.NullString
+	var workplace models.NullInt64
+
+	if e.FileCode == "" {
+		fileCode.Valid = false
+	} else {
+		fileCode.Valid = true
+		fileCode.String = e.FileCode
+	}
+
+	if e.DocumentNumber == "" {
+		documentNumber.Valid = false
+	} else {
+		documentNumber.Valid = true
+		documentNumber.String = e.DocumentNumber
+	}
 
 	if e.BirthDate == "" {
 		birthDate.Valid = false
@@ -39,19 +55,26 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 		dateAdmission.String = e.DateAdmission
 	}
 
+	if e.Workplace == 0 {
+		workplace.Valid = false
+	} else {
+		workplace.Valid = true
+		workplace.Int64 = e.Workplace
+	}
+
 	rows := database.Data().QueryRowContext(
-		ctx, q, e.FileCode, e.AgentNumber, e.FirstName, e.LastName, e.DocumentNumber,
+		ctx, q, fileCode, e.AgentNumber, e.FirstName, e.LastName, documentNumber,
 		birthDate, dateAdmission, e.Phone, e.Address, e.Picture, e.Salary,
-		e.Category, e.Status, e.WorkNumber, e.EmployeeType, e.Workplace, e.UpdatedAt, id,
+		e.Category, e.Status, e.WorkNumber, e.EmployeeType, workplace, e.UpdatedAt, id,
 	)
 
 	err := rows.Scan(
 		&employee.ID,
-		&employee.FileCode,
+		&fileCode,
 		&employee.AgentNumber,
 		&employee.FirstName,
 		&employee.LastName,
-		&employee.DocumentNumber,
+		&documentNumber,
 		&birthDate,
 		&dateAdmission,
 		&employee.Phone,
@@ -62,10 +85,18 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 		&employee.Status,
 		&employee.WorkNumber,
 		&employee.EmployeeType,
-		&employee.Workplace,
+		&workplace,
 		&employee.CreatedAt,
 		&employee.UpdatedAt,
 	)
+
+	if fileCode.Valid {
+		employee.FileCode = fileCode.String
+	}
+
+	if documentNumber.Valid {
+		employee.DocumentNumber = documentNumber.String
+	}
 
 	if birthDate.Valid {
 		employee.BirthDate = birthDate.String
@@ -73,6 +104,10 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 
 	if dateAdmission.Valid {
 		employee.DateAdmission = dateAdmission.String
+	}
+
+	if workplace.Valid {
+		employee.Workplace = workplace.Int64
 	}
 
 	if err != nil {

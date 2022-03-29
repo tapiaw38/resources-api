@@ -158,6 +158,8 @@ func GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeRes
 	for rows.Next() {
 		var e models.EmployeeResponse
 		var fileCode, agentNumber, documentNumber models.NullString
+		var salary models.NullFloat64
+		var category models.NullInt64
 		var workplaceId models.NullInt64
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
 		var typeId models.NullInt64
@@ -176,8 +178,8 @@ func GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeRes
 			&e.Phone,
 			&e.Address,
 			&e.Picture,
-			&e.Salary,
-			&e.Category,
+			&salary,
+			&category,
 			&e.Status,
 			&e.WorkNumber,
 			&workplaceId,
@@ -215,6 +217,14 @@ func GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeRes
 
 		if dateAdmission.Valid {
 			e.DateAdmission = dateAdmission.String
+		}
+
+		if salary.Valid {
+			e.Salary = salary.Float64
+		}
+
+		if category.Valid {
+			e.Category = category.Int64
 		}
 
 		if workplaceId.Valid {
