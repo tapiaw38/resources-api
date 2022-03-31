@@ -158,13 +158,15 @@ func GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeRes
 	for rows.Next() {
 		var e models.EmployeeResponse
 		var fileCode, agentNumber, documentNumber models.NullString
+		var birthDate, dateAdmission models.NullString
 		var salary models.NullFloat64
 		var category models.NullInt64
+		// var workplace nulls
 		var workplaceId models.NullInt64
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
+		// var type nulls
 		var typeId models.NullInt64
 		var typeName, typeDescription models.NullString
-		var birthDate, dateAdmission models.NullString
 
 		err := rows.Scan(
 			&e.ID,
@@ -198,62 +200,22 @@ func GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeRes
 		}
 
 		// Set nullable fields
-
-		if fileCode.Valid {
-			e.FileCode = fileCode.String
-		}
-
-		if agentNumber.Valid {
-			e.AgentNumber = agentNumber.String
-		}
-
-		if documentNumber.Valid {
-			e.DocumentNumber = documentNumber.String
-		}
-
-		if birthDate.Valid {
-			e.BirthDate = birthDate.String
-		}
-
-		if dateAdmission.Valid {
-			e.DateAdmission = dateAdmission.String
-		}
-
-		if salary.Valid {
-			e.Salary = salary.Float64
-		}
-
-		if category.Valid {
-			e.Category = category.Int64
-		}
-
-		if workplaceId.Valid {
-			e.Workplace.ID = workplaceId.Int64
-		}
-
-		if workplaceName.Valid {
-			e.Workplace.Name = workplaceName.String
-		}
-
-		if workplaceCode.Valid {
-			e.Workplace.Code = workplaceCode.String
-		}
-
-		if workplaceAddress.Valid {
-			e.Workplace.Address = workplaceAddress.String
-		}
-
-		if typeId.Valid {
-			e.EmployeeType.ID = typeId.Int64
-		}
-
-		if typeName.Valid {
-			e.EmployeeType.Name = typeName.String
-		}
-
-		if typeDescription.Valid {
-			e.EmployeeType.Description = typeDescription.String
-		}
+		e.FileCode = fileCode.String
+		e.AgentNumber = agentNumber.String
+		e.DocumentNumber = documentNumber.String
+		e.BirthDate = birthDate.String
+		e.DateAdmission = dateAdmission.String
+		e.Salary = salary.Float64
+		e.Category = category.Int64
+		// Set workplace
+		e.Workplace.ID = workplaceId.Int64
+		e.Workplace.Name = workplaceName.String
+		e.Workplace.Code = workplaceCode.String
+		e.Workplace.Address = workplaceAddress.String
+		// Set employee type
+		e.EmployeeType.ID = typeId.Int64
+		e.EmployeeType.Name = typeName.String
+		e.EmployeeType.Description = typeDescription.String
 
 		employees = append(employees, e)
 	}

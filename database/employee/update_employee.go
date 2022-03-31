@@ -27,45 +27,12 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 	var birthDate, dateAdmission models.NullString
 	var workplace models.NullInt64
 
-	if e.FileCode == "" {
-		fileCode.Valid = false
-	} else {
-		fileCode.Valid = true
-		fileCode.String = e.FileCode
-	}
-
-	if e.DocumentNumber == "" {
-		documentNumber.Valid = false
-	} else {
-		documentNumber.Valid = true
-		documentNumber.String = e.DocumentNumber
-	}
-
-	if e.BirthDate == "" {
-		birthDate.Valid = false
-	} else {
-		birthDate.Valid = true
-		birthDate.String = e.BirthDate
-	}
-
-	if e.DateAdmission == "" {
-		dateAdmission.Valid = false
-	} else {
-		dateAdmission.Valid = true
-		dateAdmission.String = e.DateAdmission
-	}
-
-	if e.Workplace == 0 {
-		workplace.Valid = false
-	} else {
-		workplace.Valid = true
-		workplace.Int64 = e.Workplace
-	}
-
 	rows := database.Data().QueryRowContext(
-		ctx, q, fileCode, e.AgentNumber, e.FirstName, e.LastName, documentNumber,
-		birthDate, dateAdmission, e.Phone, e.Address, e.Picture, e.Salary,
-		e.Category, e.Status, e.WorkNumber, e.EmployeeType, workplace, e.UpdatedAt, id,
+		ctx, q, database.StringToNull(e.FileCode), e.AgentNumber, e.FirstName,
+		e.LastName, database.StringToNull(e.DocumentNumber),
+		database.StringToNull(e.BirthDate), database.StringToNull(e.DateAdmission),
+		e.Phone, e.Address, e.Picture, e.Salary, e.Category, e.Status, e.WorkNumber,
+		e.EmployeeType, database.IntToNull(e.Workplace), e.UpdatedAt, id,
 	)
 
 	err := rows.Scan(
@@ -90,25 +57,11 @@ func UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.E
 		&employee.UpdatedAt,
 	)
 
-	if fileCode.Valid {
-		employee.FileCode = fileCode.String
-	}
-
-	if documentNumber.Valid {
-		employee.DocumentNumber = documentNumber.String
-	}
-
-	if birthDate.Valid {
-		employee.BirthDate = birthDate.String
-	}
-
-	if dateAdmission.Valid {
-		employee.DateAdmission = dateAdmission.String
-	}
-
-	if workplace.Valid {
-		employee.Workplace = workplace.Int64
-	}
+	employee.FileCode = fileCode.String
+	employee.DocumentNumber = documentNumber.String
+	employee.BirthDate = birthDate.String
+	employee.DateAdmission = dateAdmission.String
+	employee.Workplace = workplace.Int64
 
 	if err != nil {
 		return employee, err
