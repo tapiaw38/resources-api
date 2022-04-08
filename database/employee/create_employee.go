@@ -7,6 +7,7 @@ import (
 	"github.com/tapiaw38/resources-api/models"
 )
 
+// CreateEmployee creates a new employee in database
 func CreateEmployee(ctx context.Context, e *models.Employee) (models.Employee, error) {
 
 	var employee models.Employee

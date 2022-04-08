@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS employee (
 
 CREATE TABLE IF NOT EXISTS paying (
     id BIGSERIAL NOT NULL,
-    employee_id BIGINT NOT NULL,
+    employee BIGINT NOT NULL,
     month VARCHAR(150) NOT NULL,
     year VARCHAR(150) NOT NULL,
     amount NUMERIC(10,2) NOT NULL,
@@ -71,6 +71,16 @@ CREATE TABLE IF NOT EXISTS paying (
     created_at timestamp DEFAULT now(),
     updated_at timestamp NOT NULL DEFAULT now(),
     CONSTRAINT pk_paying PRIMARY KEY(id),
-    CONSTRAINT fk_employee FOREIGN KEY(employee_id)
-    REFERENCES employee(id)
+    CONSTRAINT fk_employee FOREIGN KEY(employee)
+    REFERENCES employee(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS card (
+    id BIGSERIAL NOT NULL,
+    width NUMERIC(10,2) NOT NULL,
+    height NUMERIC(10,2) NOT NULL,
+    color VARCHAR(150),
+    created_at timestamp DEFAULT now(),
+    updated_at timestamp NOT NULL DEFAULT now(),
+    CONSTRAINT pk_card PRIMARY KEY(id)
+)

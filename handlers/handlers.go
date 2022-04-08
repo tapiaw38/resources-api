@@ -10,6 +10,7 @@ import (
 
 	"github.com/tapiaw38/resources-api/middlewares"
 	auth "github.com/tapiaw38/resources-api/routers/auth"
+	card "github.com/tapiaw38/resources-api/routers/card"
 	employee "github.com/tapiaw38/resources-api/routers/employee"
 	employeeType "github.com/tapiaw38/resources-api/routers/employee_type"
 	user "github.com/tapiaw38/resources-api/routers/user"
@@ -25,6 +26,7 @@ func HandlerServer() {
 	employees := router.PathPrefix("/api/v1/employees").Subrouter()
 	workplaces := router.PathPrefix("/api/v1/workplaces").Subrouter()
 	employeeTypes := router.PathPrefix("/api/v1/types").Subrouter()
+	cards := router.PathPrefix("/api/v1/cards").Subrouter()
 
 	// Routes for users
 
@@ -75,6 +77,14 @@ func HandlerServer() {
 		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.CreateEmployeeTypeHandler))
 	employeeTypes.Path("").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.GetEmployeeTypesHandler))
+
+	// Routes for cards
+	cards.Path("/create").Methods(
+		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(card.CreateCardHandler))
+	cards.Path("").Methods(
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(card.GetCardsHandler))
+	cards.Path("/update/{id:[0-9]+}").Methods(
+		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(card.UpdateCardHandler))
 
 	handler := cors.AllowAll().Handler(router)
 
