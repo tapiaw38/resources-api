@@ -42,12 +42,12 @@ func NewConnection() *sql.DB {
 	return data
 }
 
-// Data is the Pool conections to get the database usage in the packages that need it
+// Data is the Pool conection to get the database usage in the packages that need it
 func Data() *sql.DB {
 	return data
 }
 
-// Check that the connection to the database is available
+// CheckConnection that the connection to the database is available
 func CheckConnection() bool {
 
 	db, err := data.Conn(context.Background())
