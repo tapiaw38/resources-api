@@ -50,3 +50,29 @@ func GetEmployeesByTypeHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(employee)
 
 }
+
+// GetEmployeeByIdHandler handles the request to get a employee by id
+func GetEmployeesByIdHandler(w http.ResponseWriter, r *http.Request) {
+
+	id := mux.Vars(r)["id"]
+
+	if id == "" {
+		http.Error(w, "An error occurred, id is required", http.StatusBadRequest)
+		return
+	}
+
+	defer r.Body.Close()
+
+	ctx := r.Context()
+	employee, err := employee.GetEmployeeById(ctx, id)
+
+	if err != nil {
+		http.Error(w, "An error occurred when trying to get employee by id "+err.Error(), 400)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(employee)
+
+}

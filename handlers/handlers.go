@@ -61,6 +61,8 @@ func HandlerServer() {
 		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(employee.UpdateEmployeeHandler))
 	employees.Path("/get_by_type/{type_id:[0-9]+}").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByTypeHandler))
+	employees.Path("/get_by_id/{id:[0-9]+}").Methods(
+		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByIdHandler))
 
 	// Routes for workplaces
 	workplaces.Path("/create").Methods(
