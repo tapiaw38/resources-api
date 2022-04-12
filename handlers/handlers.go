@@ -63,6 +63,8 @@ func HandlerServer() {
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByTypeHandler))
 	employees.Path("/get_by_id/{id:[0-9]+}").Methods(
 		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByIdHandler))
+	employees.Path("/delete/{id:[0-9]+}").Methods(
+		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(employee.DeleteEmployeeHandler))
 
 	// Routes for workplaces
 	workplaces.Path("/create").Methods(
