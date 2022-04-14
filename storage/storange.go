@@ -1,4 +1,4 @@
-package database
+package storage
 
 import (
 	"context"
@@ -8,12 +8,17 @@ import (
 )
 
 var (
-	data *sql.DB
+	data *Data
 	once sync.Once
 )
 
+// Data manages the connection to the database.
+type Data struct {
+	DB *sql.DB
+}
+
 // InitDB is the function that initializes the database
-func InitDB() *sql.DB {
+func InitDB() {
 
 	db, err := Connect()
 
@@ -27,30 +32,24 @@ func InitDB() *sql.DB {
 		panic(err)
 	}
 
-	log.Println("Migration complete")
+	data = &Data{
+		DB: db,
+	}
 
-	return db
+	log.Println("Migration complete")
 }
 
 // NewConnection is the function to get a only connection
-func NewConnection() *sql.DB {
+func NewConnection() *Data {
+	once.Do(InitDB)
 
-	once.Do(func() {
-		data = InitDB()
-	})
-
-	return data
-}
-
-// Data is the Pool conection to get the database usage in the packages that need it
-func Data() *sql.DB {
 	return data
 }
 
 // CheckConnection that the connection to the database is available
 func CheckConnection() bool {
 
-	db, err := data.Conn(context.Background())
+	db, err := data.DB.Conn(context.Background())
 
 	if err != nil {
 		panic(err)
