@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/employee_type"
 )
 
 // EmployeeTypeStorage is the struct that contains the database connection
@@ -13,9 +13,9 @@ type EmployeeTypeStorage struct {
 }
 
 // CreateEmployeeType inserts a new employee type into the database
-func (ept *EmployeeTypeStorage) CreateEmployeeType(ctx context.Context, et *models.EmployeeType) (models.EmployeeType, error) {
+func (ept *EmployeeTypeStorage) CreateEmployeeType(ctx context.Context, et *employee_type.EmployeeType) (employee_type.EmployeeType, error) {
 
-	var employeeType models.EmployeeType
+	var employeeType employee_type.EmployeeType
 
 	q := `
 	INSERT INTO employee_type (name, description, created_at, updated_at)
@@ -44,7 +44,7 @@ func (ept *EmployeeTypeStorage) CreateEmployeeType(ctx context.Context, et *mode
 }
 
 // Get all employee types from database
-func (ept *EmployeeTypeStorage) GetEmployeeTypes(ctx context.Context) ([]models.EmployeeType, error) {
+func (ept *EmployeeTypeStorage) GetEmployeeTypes(ctx context.Context) ([]employee_type.EmployeeType, error) {
 
 	q := `
 	SELECT id, name, description, created_at, updated_at
@@ -59,11 +59,11 @@ func (ept *EmployeeTypeStorage) GetEmployeeTypes(ctx context.Context) ([]models.
 
 	defer rows.Close()
 
-	employeeTypes := []models.EmployeeType{}
+	employeeTypes := []employee_type.EmployeeType{}
 
 	for rows.Next() {
 
-		var et models.EmployeeType
+		var et employee_type.EmployeeType
 
 		err := rows.Scan(
 			&et.ID,

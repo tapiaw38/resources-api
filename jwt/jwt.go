@@ -5,11 +5,11 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/user"
 )
 
 // GenerateToken generates a JWT token
-func GenerateJWT(user models.User) (string, error) {
+func GenerateJWT(user user.User) (string, error) {
 
 	myKey := []byte(os.Getenv("JWT_SECRET"))
 

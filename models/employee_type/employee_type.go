@@ -1,4 +1,4 @@
-package models
+package employee_type
 
 // EmployeeType model
 type EmployeeType struct {

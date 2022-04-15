@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/card"
 )
 
 // CardStorage is the interface that wraps the methods to manage the cards
@@ -13,9 +13,9 @@ type CardStorage struct {
 }
 
 // CreateCard creates a new card in the database
-func (cd *CardStorage) CreateCard(ctx context.Context, c *models.Card) (models.Card, error) {
+func (cd *CardStorage) CreateCard(ctx context.Context, c *card.Card) (card.Card, error) {
 
-	var card models.Card
+	var card card.Card
 
 	q := `
 	INSERT INTO card (width, height, color, created_at, updated_at)
@@ -44,9 +44,9 @@ func (cd *CardStorage) CreateCard(ctx context.Context, c *models.Card) (models.C
 }
 
 // GetCard returns a card from the database
-func (cd *CardStorage) GetCards(ctx context.Context) ([]models.Card, error) {
+func (cd *CardStorage) GetCards(ctx context.Context) ([]card.Card, error) {
 
-	var cards []models.Card
+	var cards []card.Card
 
 	q := `
 	SELECT id, width, height, color, created_at, updated_at
@@ -62,7 +62,7 @@ func (cd *CardStorage) GetCards(ctx context.Context) ([]models.Card, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var card models.Card
+		var card card.Card
 
 		err := rows.Scan(
 			&card.ID,
@@ -83,9 +83,9 @@ func (cd *CardStorage) GetCards(ctx context.Context) ([]models.Card, error) {
 }
 
 // UpdateCard updates a card in the database
-func (cd *CardStorage) UpdateCard(ctx context.Context, id string, c models.Card) (models.Card, error) {
+func (cd *CardStorage) UpdateCard(ctx context.Context, id string, c card.Card) (card.Card, error) {
 
-	var card models.Card
+	var card card.Card
 
 	q := `
 	UPDATE card SET width = $1, height = $2, color = $3, updated_at = $4

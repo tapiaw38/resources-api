@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/workplace"
 )
 
 type WorkplaceStorage struct {
@@ -12,9 +12,9 @@ type WorkplaceStorage struct {
 }
 
 // CreateWorkplace inserts a new workplace into the database
-func (wp *WorkplaceStorage) CreateWorkplace(ctx context.Context, w *models.Workplace) (models.Workplace, error) {
+func (wp *WorkplaceStorage) CreateWorkplace(ctx context.Context, w *workplace.Workplace) (workplace.Workplace, error) {
 
-	var workplace models.Workplace
+	var workplace workplace.Workplace
 
 	q := `
 	INSERT INTO workplace (name, code, address, created_at, updated_at)
@@ -43,7 +43,7 @@ func (wp *WorkplaceStorage) CreateWorkplace(ctx context.Context, w *models.Workp
 }
 
 // Get all workplaces from database
-func (wp *WorkplaceStorage) GetWorkplaces(ctx context.Context) ([]models.Workplace, error) {
+func (wp *WorkplaceStorage) GetWorkplaces(ctx context.Context) ([]workplace.Workplace, error) {
 
 	q := `
 	SELECT id, name, code, address, created_at, updated_at
@@ -59,11 +59,11 @@ func (wp *WorkplaceStorage) GetWorkplaces(ctx context.Context) ([]models.Workpla
 
 	defer rows.Close()
 
-	workplaces := []models.Workplace{}
+	workplaces := []workplace.Workplace{}
 
 	for rows.Next() {
 
-		var wp models.Workplace
+		var wp workplace.Workplace
 
 		err := rows.Scan(
 			&wp.ID,
@@ -87,9 +87,9 @@ func (wp *WorkplaceStorage) GetWorkplaces(ctx context.Context) ([]models.Workpla
 }
 
 // UpdateWorkplace updates a workplace in the database
-func (wp *WorkplaceStorage) UpdateWorkplace(ctx context.Context, id string, w models.Workplace) (models.Workplace, error) {
+func (wp *WorkplaceStorage) UpdateWorkplace(ctx context.Context, id string, w workplace.Workplace) (workplace.Workplace, error) {
 
-	var workplace models.Workplace
+	var workplace workplace.Workplace
 
 	q := `
 	UPDATE workplace

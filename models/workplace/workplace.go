@@ -1,4 +1,4 @@
-package models
+package workplace
 
 import "time"
 

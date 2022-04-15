@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/user"
 )
 
 type UserStorage struct {
@@ -12,7 +12,7 @@ type UserStorage struct {
 }
 
 // CheckUser checks if a user and email exists in the database
-func (ur *UserStorage) CheckUser(email string) (models.User, bool) {
+func (ur *UserStorage) CheckUser(email string) (user.User, bool) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
@@ -24,7 +24,7 @@ func (ur *UserStorage) CheckUser(email string) (models.User, bool) {
 
 	rows := ur.Data.DB.QueryRowContext(ctx, q, email)
 
-	var user models.User
+	var user user.User
 
 	err := rows.Scan(
 		&user.ID,
@@ -49,9 +49,9 @@ func (ur *UserStorage) CheckUser(email string) (models.User, bool) {
 }
 
 // CreateUser inserts a new user into the database
-func (ur *UserStorage) CreateUser(ctx context.Context, u *models.User) (models.User, error) {
+func (ur *UserStorage) CreateUser(ctx context.Context, u *user.User) (user.User, error) {
 
-	var user models.User
+	var user user.User
 
 	q := `
     INSERT INTO users (first_name, last_name, username, email, picture, password, created_at, updated_at)
@@ -114,7 +114,7 @@ func (ur *UserStorage) DeleteUser(ctx context.Context, id string) error {
 }
 
 // Get all users from database
-func (ur *UserStorage) GetUsers(ctx context.Context) ([]models.User, error) {
+func (ur *UserStorage) GetUsers(ctx context.Context) ([]user.User, error) {
 
 	q := `
 	SELECT id, first_name, last_name, username, email, picture, password, is_active, is_admin, created_at, updated_at
@@ -128,10 +128,10 @@ func (ur *UserStorage) GetUsers(ctx context.Context) ([]models.User, error) {
 
 	defer rows.Close()
 
-	users := []models.User{}
+	users := []user.User{}
 
 	for rows.Next() {
-		var u models.User
+		var u user.User
 
 		err := rows.Scan(
 			&u.ID,
@@ -158,7 +158,7 @@ func (ur *UserStorage) GetUsers(ctx context.Context) ([]models.User, error) {
 }
 
 // Get user by id from database
-func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*models.User, error) {
+func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*user.User, error) {
 
 	q := `
 	SELECT id, first_name, last_name, username, email, picture, is_active, is_admin, created_at, updated_at
@@ -170,7 +170,7 @@ func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*models.User
 		ctx, q, id,
 	)
 
-	u := models.User{}
+	u := user.User{}
 
 	err := row.Scan(
 		&u.ID,
@@ -194,7 +194,7 @@ func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*models.User
 }
 
 // Get user by username from database
-func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (*models.User, error) {
+func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
 
 	q := `
 	SELECT id, first_name, last_name, username, email, picture, is_active, is_admin, created_at, updated_at
@@ -206,7 +206,7 @@ func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (
 		ctx, q, username,
 	)
 
-	u := models.User{}
+	u := user.User{}
 
 	err := row.Scan(
 		&u.ID,
@@ -230,9 +230,9 @@ func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (
 }
 
 // UpdateUser updates a user in the database
-func (ur *UserStorage) UpdateUser(ctx context.Context, id string, u models.User) (models.User, error) {
+func (ur *UserStorage) UpdateUser(ctx context.Context, id string, u user.User) (user.User, error) {
 
-	var user models.User
+	var user user.User
 
 	q := `
 	UPDATE users

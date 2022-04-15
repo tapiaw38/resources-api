@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/tapiaw38/resources-api/models"
+	"github.com/tapiaw38/resources-api/models/employee"
 )
 
 type EmployeeStorage struct {
@@ -11,9 +12,9 @@ type EmployeeStorage struct {
 }
 
 // CreateEmployee creates a new employee in database
-func (ep *EmployeeStorage) CreateEmployee(ctx context.Context, e *models.Employee) (models.Employee, error) {
+func (ep *EmployeeStorage) CreateEmployee(ctx context.Context, e *employee.Employee) (employee.Employee, error) {
 
-	var employee models.Employee
+	var employee employee.Employee
 
 	q := `
 	INSERT INTO employee (file_code, agent_number, first_name, last_name, document_number,
@@ -79,7 +80,7 @@ func (ep *EmployeeStorage) CreateEmployee(ctx context.Context, e *models.Employe
 }
 
 // Get all employees from database
-func (ep *EmployeeStorage) GetEmployees(ctx context.Context) ([]models.EmployeeResponse, error) {
+func (ep *EmployeeStorage) GetEmployees(ctx context.Context) ([]employee.EmployeeResponse, error) {
 
 	q := `
 	SELECT employee.id, employee.file_code, employee.agent_number, 
@@ -101,10 +102,10 @@ func (ep *EmployeeStorage) GetEmployees(ctx context.Context) ([]models.EmployeeR
 
 	defer rows.Close()
 
-	employees := []models.EmployeeResponse{}
+	employees := []employee.EmployeeResponse{}
 
 	for rows.Next() {
-		var e models.EmployeeResponse
+		var e employee.EmployeeResponse
 		var fileCode, agentNumber, documentNumber models.NullString
 		var workplaceId models.NullInt64
 		var workplaceName, workplaceCode, workplaceAddress models.NullString
@@ -165,7 +166,7 @@ func (ep *EmployeeStorage) GetEmployees(ctx context.Context) ([]models.EmployeeR
 }
 
 // Get employees by type from database
-func (ep *EmployeeStorage) GetEmployeeByType(ctx context.Context, typeId string) ([]models.EmployeeResponse, error) {
+func (ep *EmployeeStorage) GetEmployeeByType(ctx context.Context, typeId string) ([]employee.EmployeeResponse, error) {
 
 	q := `
 	SELECT employee.id, employee.file_code, employee.agent_number, 
@@ -189,10 +190,10 @@ func (ep *EmployeeStorage) GetEmployeeByType(ctx context.Context, typeId string)
 
 	defer rows.Close()
 
-	employees := []models.EmployeeResponse{}
+	employees := []employee.EmployeeResponse{}
 
 	for rows.Next() {
-		var e models.EmployeeResponse
+		var e employee.EmployeeResponse
 		var fileCode, agentNumber, documentNumber models.NullString
 		var birthDate, dateAdmission models.NullString
 		var salary models.NullFloat64
@@ -260,7 +261,7 @@ func (ep *EmployeeStorage) GetEmployeeByType(ctx context.Context, typeId string)
 }
 
 // Get employees by id from database
-func (ep *EmployeeStorage) GetEmployeeById(ctx context.Context, id string) (models.EmployeeResponse, error) {
+func (ep *EmployeeStorage) GetEmployeeById(ctx context.Context, id string) (employee.EmployeeResponse, error) {
 
 	q := `
 	SELECT employee.id, employee.file_code, employee.agent_number, 
@@ -278,7 +279,7 @@ func (ep *EmployeeStorage) GetEmployeeById(ctx context.Context, id string) (mode
 
 	row := ep.Data.DB.QueryRowContext(ctx, q, id)
 
-	var e models.EmployeeResponse
+	var e employee.EmployeeResponse
 	var fileCode, agentNumber, documentNumber models.NullString
 	var birthDate, dateAdmission models.NullString
 	var salary models.NullFloat64
@@ -343,9 +344,9 @@ func (ep *EmployeeStorage) GetEmployeeById(ctx context.Context, id string) (mode
 }
 
 // Update employee in database by id
-func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e models.Employee) (models.Employee, error) {
+func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e employee.Employee) (employee.Employee, error) {
 
-	var employee models.Employee
+	var employee employee.Employee
 
 	q := `
 	UPDATE employee
@@ -406,9 +407,9 @@ func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e mode
 }
 
 // DeleteEmployee deletes an employee from the database
-func (ep *UserStorage) DeleteEmployee(ctx context.Context, id string) (models.Employee, error) {
+func (ep *EmployeeStorage) DeleteEmployee(ctx context.Context, id string) (employee.Employee, error) {
 
-	var employee models.Employee
+	var employee employee.Employee
 
 	q := `
 		DELETE FROM employee

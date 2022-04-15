@@ -30,7 +30,7 @@ func Connect() (*sql.DB, error) {
 
 // MakeMigration creates the tables
 func MakeMigration(db *sql.DB) error {
-	b, err := ioutil.ReadFile("database/models.sql")
+	b, err := ioutil.ReadFile("storage/models.sql")
 
 	if err != nil {
 		return err
