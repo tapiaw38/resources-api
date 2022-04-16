@@ -19,3 +19,6 @@ go.work
 
 # Develop environment
 .env
+
+# Editor backup file
+.idea

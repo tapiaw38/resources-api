@@ -158,7 +158,7 @@ func (ur *UserStorage) GetUsers(ctx context.Context) ([]user.User, error) {
 }
 
 // Get user by id from database
-func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*user.User, error) {
+func (ur *UserStorage) GetUserById(ctx context.Context, id string) (user.User, error) {
 
 	q := `
 	SELECT id, first_name, last_name, username, email, picture, is_active, is_admin, created_at, updated_at
@@ -186,15 +186,15 @@ func (ur *UserStorage) GetUserById(ctx context.Context, id string) (*user.User, 
 	)
 
 	if err != nil {
-		return nil, err
+		return u, err
 	}
 
-	return &u, nil
+	return u, nil
 
 }
 
 // Get user by username from database
-func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
+func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (user.User, error) {
 
 	q := `
 	SELECT id, first_name, last_name, username, email, picture, is_active, is_admin, created_at, updated_at
@@ -222,10 +222,10 @@ func (ur *UserStorage) GetUserByUsername(ctx context.Context, username string) (
 	)
 
 	if err != nil {
-		return nil, err
+		return u, err
 	}
 
-	return &u, nil
+	return u, nil
 
 }
 

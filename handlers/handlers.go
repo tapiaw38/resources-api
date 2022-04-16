@@ -28,9 +28,31 @@ func HandlerServer() {
 		},
 	}
 
+	employeeTypes := &routers.EmployeeTypeRouter{
+		Storage: &storage.EmployeeTypeStorage{
+			Data: storage.NewConnection(),
+		},
+	}
+
+	cards := &routers.CardRouter{
+		Storage: &storage.CardStorage{
+			Data: storage.NewConnection(),
+		},
+	}
+
+	users := &routers.UserRouter{
+		Storage: &storage.UserStorage{
+			Data: storage.NewConnection(),
+		},
+	}
+
 	// Mount the employees router
+
+	mount(router, "/users", users.UserRoutes())
 	mount(router, "/employees", employees.EmployeeRoutes())
 	mount(router, "/workplaces", workplaces.WorkplaceRoutes())
+	mount(router, "/types", employeeTypes.EmployeeTypeRoutes())
+	mount(router, "/cards", cards.CardRoutes())
 
 	handler := cors.AllowAll().Handler(router)
 	// Start the server
@@ -54,6 +76,7 @@ func HandlerServer() {
 	}
 }
 
+// mount is a helper function to mount a router to a path
 func mount(r *mux.Router, path string, handler http.Handler) {
 	r.PathPrefix(path).Handler(
 		http.StripPrefix(

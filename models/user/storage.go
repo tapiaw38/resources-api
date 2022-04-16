@@ -2,7 +2,7 @@ package user
 
 import "context"
 
-// UserStorage handle the CRUD operations with Users.
+// Storage handle the CRUD operations with Users.
 type Storage interface {
 	CheckUser(email string) (User, bool)
 	CreateUser(ctx context.Context, user *User) (User, error)
