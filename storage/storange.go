@@ -39,7 +39,7 @@ func InitDB() {
 	log.Println("Migration complete")
 }
 
-// NewConnection is the function to get a only connection
+// NewConnection is the function to get only connection
 func NewConnection() *Data {
 	once.Do(InitDB)
 
@@ -55,9 +55,11 @@ func CheckConnection() bool {
 		panic(err)
 	}
 
-	defer db.Close()
-
 	err = db.PingContext(context.Background())
 
+	if err != nil {
+		panic(err)
+	}
+	
 	return err == nil
 }
