@@ -359,12 +359,12 @@ func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e empl
 			employee_type, workplace, created_at, updated_at;
 	`
 
-	var fileCode, documentNumber models.NullString
+	var fileCode, agentNumber, documentNumber models.NullString
 	var birthDate, dateAdmission models.NullString
 	var workplace models.NullInt64
 
 	rows := ep.Data.DB.QueryRowContext(
-		ctx, q, StringToNull(e.FileCode), e.AgentNumber, e.FirstName,
+		ctx, q, StringToNull(e.FileCode), StringToNull(e.AgentNumber), e.FirstName,
 		e.LastName, StringToNull(e.DocumentNumber),
 		StringToNull(e.BirthDate), StringToNull(e.DateAdmission),
 		e.Phone, e.Address, e.Picture, e.Salary, e.Category, e.Status, e.WorkNumber,
@@ -374,7 +374,7 @@ func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e empl
 	err := rows.Scan(
 		&employee.ID,
 		&fileCode,
-		&employee.AgentNumber,
+		&agentNumber,
 		&employee.FirstName,
 		&employee.LastName,
 		&documentNumber,
@@ -394,6 +394,7 @@ func (ep *EmployeeStorage) UpdateEmployee(ctx context.Context, id string, e empl
 	)
 
 	employee.FileCode = fileCode.String
+	employee.AgentNumber = agentNumber.String
 	employee.DocumentNumber = documentNumber.String
 	employee.BirthDate = birthDate.String
 	employee.DateAdmission = dateAdmission.String
