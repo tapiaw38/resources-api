@@ -46,8 +46,7 @@ func HandlerServer() {
 		},
 	}
 
-	// Mount the employees router
-
+	// Mount the routers
 	mount(router, "/users", users.UserRoutes())
 	mount(router, "/employees", employees.EmployeeRoutes())
 	mount(router, "/workplaces", workplaces.WorkplaceRoutes())

@@ -22,3 +22,7 @@ go.work
 
 # Editor backup file
 .idea
+
+# Docker
+Dockerfile
+docker-compose.yml

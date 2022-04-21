@@ -12,6 +12,7 @@ func (ur *UserRouter) UserRoutes() *mux.Router {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/create", ur.CreateUserHandler).Methods("POST")
+	r.HandleFunc("/login", ur.LoginHandler).Methods("POST")
 	r.HandleFunc("/all", ur.GetUsersHandler).Methods("GET")
 	r.HandleFunc("/get_by_id/{id}", ur.GetUserByIdHandler).Methods("GET")
 	r.HandleFunc("/update/{id}", ur.UpdateUserHandler).Methods("PUT")
