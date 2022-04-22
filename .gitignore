@@ -19,3 +19,10 @@ go.work
 
 # Develop environment
 .env
+
+# Editor backup file
+.idea
+
+# Docker
+Dockerfile
+docker-compose.yml

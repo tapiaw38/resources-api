@@ -1,23 +1,32 @@
 package models
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	sql "database/sql"
+	"time"
+)
 
-// HashPassword hashes the password
-func (u *User) HashPassword() error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-
-	u.PasswordHash = string(passwordHash)
-
-	return nil
+// Null String type for sql.NullString
+type NullString struct {
+	sql.NullString
 }
 
-// CheckPassword checks the password
-func (u *User) PasswordMatch(password string) bool {
-	passwordBytes := []byte(password)
-	err := bcrypt.CompareHashAndPassword([]byte(u.Password), passwordBytes)
+// Null Int type for sql.NullInt64
+type NullInt64 struct {
+	sql.NullInt64
+}
 
-	return err == nil
+// Null Time type for sql.NullTime
+type NullTime struct {
+	time.Time
+	Valid bool
+}
+
+// Null Float type for sql.NullFloat64
+type NullFloat64 struct {
+	sql.NullFloat64
+}
+
+// Null Bool type for sql.NullBool
+type NullBool struct {
+	sql.NullBool
 }

@@ -4,94 +4,56 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
-
-	"github.com/tapiaw38/resources-api/middlewares"
-	auth "github.com/tapiaw38/resources-api/routers/auth"
-	card "github.com/tapiaw38/resources-api/routers/card"
-	employee "github.com/tapiaw38/resources-api/routers/employee"
-	employeeType "github.com/tapiaw38/resources-api/routers/employee_type"
-	user "github.com/tapiaw38/resources-api/routers/user"
-	workplace "github.com/tapiaw38/resources-api/routers/workplace"
+	"github.com/tapiaw38/resources-api/routers"
+	"github.com/tapiaw38/resources-api/storage"
 )
 
 // HandleServer handles the server request
 func HandlerServer() {
 	router := mux.NewRouter()
 
-	// Initialize the routes
-	users := router.PathPrefix("/api/v1/users").Subrouter()
-	employees := router.PathPrefix("/api/v1/employees").Subrouter()
-	workplaces := router.PathPrefix("/api/v1/workplaces").Subrouter()
-	employeeTypes := router.PathPrefix("/api/v1/types").Subrouter()
-	cards := router.PathPrefix("/api/v1/cards").Subrouter()
+	employees := &routers.EmployeeRouter{
+		Storage: &storage.EmployeeStorage{
+			Data: storage.NewConnection(),
+		},
+	}
 
-	// Routes for users
+	workplaces := &routers.WorkplaceRouter{
+		Storage: &storage.WorkplaceStorage{
+			Data: storage.NewConnection(),
+		},
+	}
 
-	//create
-	users.Path("/register").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(user.CreateUserHandler))
-	//get all
-	users.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.GetUsersHandler)))
-	//get by id
-	users.Path("/user/{id:[0-9]+}").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByIdHandler)))
-	//get by username
-	users.Path("/profile").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.GetUserByUsernameHandler)))
-	//update
-	users.Path("/update/{id:[0-9]+}").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthMiddleware(user.UpdateUserHandler)))
-	//delete
-	users.Path("/delete/{id:[0-9]+}").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(middlewares.AuthAdminMiddleware(user.DeleteUserHandler)))
-	//login
-	users.Path("/login").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(auth.LoginHandler))
+	employeeTypes := &routers.EmployeeTypeRouter{
+		Storage: &storage.EmployeeTypeStorage{
+			Data: storage.NewConnection(),
+		},
+	}
 
-	// Routes for employees
-	employees.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employee.CreateEmployeeHandler))
-	employees.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesHandler))
-	employees.Path("/update/{id:[0-9]+}").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(employee.UpdateEmployeeHandler))
-	employees.Path("/get_by_type/{type_id:[0-9]+}").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByTypeHandler))
-	employees.Path("/get_by_id/{id:[0-9]+}").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employee.GetEmployeesByIdHandler))
-	employees.Path("/delete/{id:[0-9]+}").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(employee.DeleteEmployeeHandler))
+	cards := &routers.CardRouter{
+		Storage: &storage.CardStorage{
+			Data: storage.NewConnection(),
+		},
+	}
 
-	// Routes for workplaces
-	workplaces.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(workplace.CreateWorkplaceHandler))
-	workplaces.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(workplace.GetWorkplacesHandler))
-	workplaces.Path("/update/{id:[0-9]+}").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(workplace.UpdateWorkplaceHandler))
-	workplaces.Path("/delete/{id:[0-9]+}").Methods(
-		http.MethodDelete).HandlerFunc(middlewares.CheckDBMiddleware(workplace.DeleteWorkplaceHandler))
+	users := &routers.UserRouter{
+		Storage: &storage.UserStorage{
+			Data: storage.NewConnection(),
+		},
+	}
 
-	// Routes for employee types
-	employeeTypes.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.CreateEmployeeTypeHandler))
-	employeeTypes.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(employeeType.GetEmployeeTypesHandler))
-
-	// Routes for cards
-	cards.Path("/create").Methods(
-		http.MethodPost).HandlerFunc(middlewares.CheckDBMiddleware(card.CreateCardHandler))
-	cards.Path("").Methods(
-		http.MethodGet).HandlerFunc(middlewares.CheckDBMiddleware(card.GetCardsHandler))
-	cards.Path("/update/{id:[0-9]+}").Methods(
-		http.MethodPut).HandlerFunc(middlewares.CheckDBMiddleware(card.UpdateCardHandler))
+	// Mount the routers
+	mount(router, "/users", users.UserRoutes())
+	mount(router, "/employees", employees.EmployeeRoutes())
+	mount(router, "/workplaces", workplaces.WorkplaceRoutes())
+	mount(router, "/types", employeeTypes.EmployeeTypeRoutes())
+	mount(router, "/cards", cards.CardRoutes())
 
 	handler := cors.AllowAll().Handler(router)
-
 	// Start the server
 
 	PORT := os.Getenv("PORT")
@@ -111,4 +73,14 @@ func HandlerServer() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// mount is a helper function to mount a router to a path
+func mount(r *mux.Router, path string, handler http.Handler) {
+	r.PathPrefix(path).Handler(
+		http.StripPrefix(
+			strings.TrimSuffix(path, "/"),
+			handler,
+		),
+	)
 }

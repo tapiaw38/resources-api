@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/tapiaw38/resources-api/database"
 	"github.com/tapiaw38/resources-api/handlers"
+	"github.com/tapiaw38/resources-api/storage"
 
 	"log"
 
@@ -18,9 +18,9 @@ func main() {
 	}
 
 	// Connect to the database
-	db := database.NewConnection()
+	db := storage.NewConnection()
 
-	if err := db.Ping(); err != nil {
+	if err := db.DB.Ping(); err != nil {
 		log.Fatal(err)
 	}
 
