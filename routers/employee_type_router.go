@@ -11,7 +11,7 @@ type EmployeeTypeRouter struct {
 	Storage employee_type.Storage
 }
 
-// CreateEmployeeTypeHandler is a handler for creating a new employee types
+// CreateEmployeeTypeHandler is a handler for creating a new employee type
 func (ept *EmployeeTypeRouter) CreateEmployeeTypeHandler(w http.ResponseWriter, r *http.Request) {
 
 	var et employee_type.EmployeeType
