@@ -92,7 +92,8 @@ func (ep *EmployeeStorage) GetEmployees(ctx context.Context) ([]employee.Employe
 		employee.created_at, employee.updated_at	
 		FROM employee
 		LEFT JOIN workplace ON employee.workplace = workplace.id
-		LEFT JOIN employee_type ON employee.employee_type = employee_type.id;
+		LEFT JOIN employee_type ON employee.employee_type = employee_type.id
+		ORDER BY employee.last_name ASC;
 	`
 
 	rows, err := ep.Data.DB.QueryContext(ctx, q)
@@ -179,7 +180,8 @@ func (ep *EmployeeStorage) GetEmployeeByType(ctx context.Context, typeId string)
 		FROM employee
 		LEFT JOIN workplace ON employee.workplace = workplace.id
 		LEFT JOIN employee_type ON employee.employee_type = employee_type.id
-		WHERE employee.employee_type = $1;
+		WHERE employee.employee_type = $1
+		ORDER BY employee.last_name ASC;
 	`
 
 	rows, err := ep.Data.DB.QueryContext(ctx, q, typeId)
